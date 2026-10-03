@@ -4,7 +4,7 @@ Weekly deliverables for the IDX Exchange Data Analyst internship.
 
 ## Week 1: Monthly Dataset Aggregation
 
-**Script:** `IDX_Workspace_Emma.py`
+**Script:** `IDXweek1_aggregate.py`
 
 Combines monthly CRMLS files into two datasets with one for sold properties
 and one for listings (spans January 2024 - September 2026).
