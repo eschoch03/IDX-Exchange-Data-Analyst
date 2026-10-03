@@ -81,7 +81,7 @@ listings_res.to_csv(folder + r"\listings_combined_residential.csv", index=False)
 #   After concat / before Residential filter:    1,046,356
 #   After Residential filter:                    665,393
 #
-# Notes:
+# notes:
 #   - Concatenation did not add or drop any rows in either dataset.
 #   - Months 202605-202609 (sold and listings) and listings 202601 were
 #     pulled with the extraction scripts and all other months came from FTP.
