@@ -28,4 +28,4 @@ Row counts before and after concatenation matched for both datasets.
 
 ### Note:
 
-The MLS data files are confidential and are not included in this repository.
+The MLS data files are confidential and not included in this repository.
