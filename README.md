@@ -1,6 +1,6 @@
 # IDX Exchange Data Analyst Internship
 
-Weekly deliverables for the IDX Exchange MLS analytics internship.
+Weekly deliverables for the IDX Exchange Data Analyst internship.
 
 ## Week 1: Monthly Dataset Aggregation
 
