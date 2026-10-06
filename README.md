@@ -163,12 +163,11 @@ remaining after the drop.
 - **Record and property identifiers:** ListingKey (primary key),
   ListingKeyNumeric, ListingId, UnparsedAddress, StreetNumberNumeric
 - **Agent, office, and system identifiers:** BuyerAgentMlsId,
-  ListAgentEmail, ListAgentAOR, BuyerAgentAOR, BuyerOfficeAOR
-  (AOR = Association of Realtors), OriginatingSystemName,
-  OriginatingSystemSubName
+  ListAgentEmail, ListAgentAOR, BuyerAgentAOR, BuyerOfficeAOR,
+  OriginatingSystemName, OriginatingSystemSubName
 - **Data pipeline flags:** latfilled, lonfilled
 
 ### Still to do for Weeks 2-3
 
 - Repeat this validation for the listings dataset
-- Mortgage rate enrichment (second Weeks 2-3 deliverable)
+- Mortgage rate enrichment
