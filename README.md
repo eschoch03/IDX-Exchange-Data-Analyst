@@ -102,15 +102,12 @@ Latitude/Longitude (0.97%), LotSizeAcres (7.67%).
 
 ### Distribution charts
 
-Histograms show the 1st-99th percentile and boxplots show all values.
+Histograms show the 1st-99th percentile and boxplots show all values. ClosePrice and DaysOnMarket are right-skewed (mean is higher than median). 
+ClosePrice peaks around 600,000-800,000 and DaysOnMarket peaks at 5-10 days.
 
 ![ClosePrice distribution](images/ClosePrice_plots.png)
 ![LivingArea distribution](images/LivingArea_plots.png)
 ![DaysOnMarket distribution](images/DaysOnMarket_plots.png)
-
-The first three rows are the deliverable fields. ClosePrice and DaysOnMarket
-are right-skewed (mean is higher than median). ClosePrice peaks around
-600,000-800,000 and DaysOnMarket peaks at 5-10 days.
 
 ### Extreme outliers identified (to handle in later weeks)
 
