@@ -167,7 +167,111 @@ remaining after the drop.
   OriginatingSystemName, OriginatingSystemSubName
 - **Data pipeline flags:** latfilled, lonfilled
 
+## Weeks 2-3: Dataset Structuring and Validation (Listings)
+
+**Script:** `IDXweek2_listings_eda.py`
+
+Inspects the combined listings dataset, documents property types, filters to
+Residential, reports missing values, and summarizes key numeric fields.
+Saves the filtered dataset as `listings_residential_validated.csv`.
+Charts and suggested questions are covered in the sold section above.
+
+Last run: 10/11/2026
+
+### Dataset structure
+
+- 33 monthly files, 1,046,356 rows and 84 columns before filtering
+- 11 columns are duplicated with a `.1` suffix (`PropertyType.1`,
+  `DaysOnMarket.1`, `LivingArea.1`, `Latitude.1`, `Longitude.1`,
+  `ListPrice.1`, `CloseDate.1`, `ListAgentFirstName.1`,
+  `ListAgentLastName.1`, `BuyerOfficeName.1`, `UnparsedAddress.1`) because
+  the extraction script requests those fields twice. Missing counts match
+  their originals. To remove in Weeks 4-5 (redundant columns).
+- Date fields are stored as text and will need converting (same as sold)
+
+### Property types and filter
+
+| Property type       | Rows    | Share  |
+|---------------------|---------|--------|
+| Residential         | 665,393 | 63.59% |
+| ResidentialLease    | 217,698 | 20.81% |
+| Land                | 67,819  | 6.48%  |
+| ResidentialIncome   | 38,745  | 3.70%  |
+| ManufacturedInPark  | 29,767  | 2.84%  |
+| CommercialSale      | 14,340  | 1.37%  |
+| CommercialLease     | 9,362   | 0.89%  |
+| BusinessOpportunity | 3,232   | 0.31%  |
+
+Filtering logic: `listings = listings[listings.PropertyType == 'Residential']`
+
+| | Rows |
+|---|---|
+| Before filter | 1,046,356 |
+| After filter  | 665,393 |
+| Removed       | 380,963 |
+
+### Missing value report
+
+13 columns are above 90% missing:
+
+- **100% missing:** TaxYear, TaxAnnualAmount, AboveGradeFinishedArea,
+  FireplacesTotal, ElementarySchoolDistrict, BusinessType, CoveredSpaces,
+  MiddleOrJuniorSchoolDistrict
+- **90-99.9% missing:** BelowGradeFinishedArea (99.41),
+  CoBuyerAgentFirstName (97.05), BuilderName (95.41),
+  LotSizeDimensions (94.77), BuildingAreaTotal (91.19)
+
+Decision: dropped all 13 (none are core analysis fields). Columns went from
+84 to 71, with rows unchanged at 665,393.
+
+Key fields: ListPrice (0 missing), DaysOnMarket (0), ListingContractDate (0),
+LivingArea (0.10%), YearBuilt (0.17%), LotSizeAcres (8.04%),
+Latitude/Longitude (12.24%). ClosePrice (70.51%) and CloseDate (67.02%) are
+missing for listings that had not closed when the data was pulled.
+
+### Numeric distribution summary
+
+| Field                 | Min  | 1%      | 25%     | Median  | Mean      | 75%       | 99%       | Max           |
+|-----------------------|------|---------|---------|---------|-----------|-----------|-----------|---------------|
+| ClosePrice            | 525  | 215,000 | 599,000 | 850,000 | 1,197,009 | 1,350,000 | 5,550,000 | 820,000,000   |
+| LivingArea            | 0    | 588     | 1,248   | 1,671   | 1,974     | 2,300     | 6,269     | 17,021,321    |
+| DaysOnMarket          | -75  | 0       | 5       | 11      | 21        | 24        | 141       | 731           |
+| ListPrice             | 1    | 210,000 | 579,900 | 840,000 | 1,308,394 | 1,370,000 | 8,000,000 | 400,000,000   |
+| OriginalListPrice     | 0    | 200,000 | 585,000 | 849,000 | 1,390,214 | 1,388,000 | 8,499,000 | 1,749,000,000 |
+| LotSizeAcres          | 0    | 0.00    | 0.12    | 0.17    | 59.15     | 0.32      | 13.50     | 4,187,292     |
+| BedroomsTotal         | 0    | 1       | 2       | 3       | 3.23      | 4         | 6         | 94            |
+| BathroomsTotalInteger | 0    | 1       | 2       | 2       | 2.63      | 3         | 7         | 2,208         |
+| YearBuilt             | 1776 | 1911    | 1961    | 1980    | 1980      | 2001      | 2026      | 2028          |
+
+The first three rows are the deliverable fields. ClosePrice is based on the
+196,224 listings that closed.
+
+### Extreme outliers identified (to handle in later weeks)
+
+- ClosePrice: as low as 525, and up to 820 million
+- LivingArea: 0, and up to ~17 million sq ft
+- DaysOnMarket: negative values (min -75), and up to 731
+- ListPrice: as low as 1, and up to 400 million
+- OriginalListPrice: 0, and up to 1.75 billion
+- LotSizeAcres: up to 4.2 million (mean 59.15 vs. median 0.17)
+- BedroomsTotal: 0, and up to 94
+- BathroomsTotalInteger: 0, and up to 2,208
+- YearBuilt: as early as 1776, and as late as 2028
+
+The 1st-99th percentile range is plausible for all nine fields.
+
+### Market analysis fields vs. metadata fields
+
+Same classification as the sold section, covering the 60 unique fields after
+the drop (71 columns minus the 11 duplicates). Fields in the sold data that
+are not in the listings data:
+
+- **Market analysis (not present):** Flooring, ViewYN, PoolPrivateYN
+- **Metadata (not present):** ListAgentAOR, BuyerAgentAOR,
+  OriginatingSystemName, OriginatingSystemSubName, latfilled, lonfilled
+
+Result: 52 market analysis fields and 8 metadata fields.
+
 ### Still to do for Weeks 2-3
 
-- Repeat this validation for the listings dataset
-- Mortgage rate enrichment
+- Mortgage rate enrichment (second Weeks 2-3 deliverable)
