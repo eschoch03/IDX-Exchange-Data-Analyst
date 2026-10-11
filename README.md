@@ -102,7 +102,7 @@ Latitude/Longitude (0.97%), LotSizeAcres (7.67%).
 
 ### Distribution charts
 
-Histograms show the 1st-99th percentile; boxplots show all values.
+Histograms show the 1st-99th percentile and boxplots show all values.
 
 ![ClosePrice distribution](images/ClosePrice_plots.png)
 ![LivingArea distribution](images/LivingArea_plots.png)
