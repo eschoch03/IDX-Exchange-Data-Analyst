@@ -100,6 +100,14 @@ Latitude/Longitude (0.97%), LotSizeAcres (7.67%).
 | BathroomsTotalInteger | 0    | 1       | 2       | 2       | 2.54      | 3         | 6         | 175           |
 | YearBuilt             | 1776 | 1912    | 1960    | 1979    | 1979      | 1999      | 2025      | 2027          |
 
+### Distribution charts
+
+Histograms show the 1st-99th percentile; boxplots show all values.
+
+![ClosePrice distribution](images/ClosePrice_plots.png)
+![LivingArea distribution](images/LivingArea_plots.png)
+![DaysOnMarket distribution](images/DaysOnMarket_plots.png)
+
 The first three rows are the deliverable fields. ClosePrice and DaysOnMarket
 are right-skewed (mean is higher than median). ClosePrice peaks around
 600,000-800,000 and DaysOnMarket peaks at 5-10 days.
