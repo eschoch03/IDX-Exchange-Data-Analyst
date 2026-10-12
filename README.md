@@ -311,6 +311,3 @@ Monthly rates for January 2024 - September 2026 ranged from 6.05%
 - `sold_with_rates.csv` and `listings_with_rates.csv`, each with two new
   columns: `year_month` and `rate_30yr_fixed`
 
-### Still to do for Weeks 2-3
-
-- Mortgage rate enrichment (second Weeks 2-3 deliverable)
