@@ -32,8 +32,7 @@ mortgage['year_month'] = mortgage['date'].dt.to_period('M')
 mortgage_monthly = (
     mortgage.groupby('year_month')['rate_30yr_fixed']
     .mean()
-    .reset_index()
-)
+    .reset_index())
 
 # monthly averages for the months covered by the MLS data
 in_range = mortgage_monthly[mortgage_monthly['year_month'] >= '2024-01']
@@ -73,8 +72,7 @@ print("Listings rows missing a rate:", listings_with_rates['rate_30yr_fixed'].is
 print(
     sold_with_rates[
         ['CloseDate', 'year_month', 'ClosePrice', 'rate_30yr_fixed']
-    ].head()
-)
+    ].head())
 
 # %% Cell 6: Save both enriched datasets
 
