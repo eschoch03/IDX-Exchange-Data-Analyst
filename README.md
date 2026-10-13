@@ -281,18 +281,18 @@ Result: 52 market analysis fields and 8 metadata fields.
 
 **Script:** `IDXweek3_mortgage_enrichment.py`
 
-Fetches the 30-year fixed mortgage rate (MORTGAGE30US) from FRED, resamples
-it from weekly to monthly averages, and merges it onto both validated
-datasets using a year_month key. Saves both enriched datasets as new CSVs.
+Fetches the 30-year fixed mortgage rate from FRED, resamples
+it from weekly to monthly averages, then merges it onto both validated
+datasets using a year_month key (saves both enriched datasets as new CSVs).
 
 Last run: 10/12/2026
 
 ### Steps
 
-1. Fetched 2,898 weekly rates from FRED (no API key required)
+1. Fetched 2,898 weekly rates from FRED
 2. Resampled weekly rates to monthly averages
-3. Created a `year_month` key on each dataset: sold from `CloseDate`,
-   listings from `ListingContractDate`
+3. Created a `year_month` key on each dataset (sold from `CloseDate`,
+   listings from `ListingContractDate`)
 4. Left merged the monthly rates onto both datasets
 5. Validated that no rows are missing a rate
 
