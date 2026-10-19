@@ -311,3 +311,84 @@ Monthly rates for January 2024 - September 2026 ranged from 6.05%
 - `sold_with_rates.csv` and `listings_with_rates.csv`, each with two new
   columns: `year_month` and `rate_30yr_fixed`
 
+## Weeks 4-5: Data Cleaning and Preparation (Sold)
+
+**Script:** `IDXweek4_sold_cleaning.py`
+
+Cleans the enriched sold dataset: converts date fields, removes redundant
+columns, handles missing and invalid values, flags date and geographic
+issues, and saves an analysis-ready CSV as `sold_cleaned.csv`.
+
+Last run: 10/19/2026
+
+### Row and column counts
+
+| | Rows | Columns |
+|---|---|---|
+| Before cleaning | 495,195 | 71 |
+| After cleaning  | 495,192 | 66 |
+
+### Transformations
+
+**1. Date fields converted to datetime**
+
+CloseDate, PurchaseContractDate, ListingContractDate, and
+ContractStatusChangeDate converted from text to `datetime64`.
+0 unreadable dates in any field.
+
+**2. Redundant and unnecessary columns removed (12)**
+
+- **Redundant:** ListingKeyNumeric (exact copy of ListingKey),
+  ListAgentFirstName and ListAgentLastName (combined in ListAgentFullName),
+  LotSizeSquareFeet (same as LotSizeAcres), LotSizeArea (mixed units)
+- **Metadata not used for analysis:** ListAgentEmail, BuyerAgentMlsId,
+  ListAgentAOR, BuyerAgentAOR, BuyerOfficeAOR, OriginatingSystemName,
+  OriginatingSystemSubName
+
+**3. Missing values**
+
+- Removed 2 rows missing ClosePrice (unusable for price metrics)
+- All other missing values left blank (they mostly mean the field does not
+  apply or was not provided, and filling them in would invent data).
+
+**4. Numeric field types confirmed**
+
+ClosePrice, ListPrice, OriginalListPrice, LivingArea, LotSizeAcres,
+BedroomsTotal, BathroomsTotalInteger, DaysOnMarket, YearBuilt, and
+rate_30yr_fixed are all numeric types (no conversion needed).
+
+**5. Invalid numeric values**
+
+| Rule | Records | Action |
+|---|---|---|
+| ClosePrice <= 0 | 1 | Row removed (sale unusable) |
+| LivingArea <= 0 | 177 | Value set to missing (sale kept) |
+| DaysOnMarket < 0 | 56 | Value set to missing (sale kept) |
+| BedroomsTotal < 0 | 0 | None needed |
+| BathroomsTotalInteger < 0 | 0 | None needed |
+
+**6. Date consistency flags**
+
+Expected order: ListingContractDate, PurchaseContractDate, then
+CloseDate. Records are flagged as opposed to removed.
+
+| Flag | Records |
+|---|---|
+| `listing_after_close_flag` | 75 |
+| `purchase_after_close_flag` | 242 |
+| `negative_timeline_flag` (contract before listing) | 315 |
+
+Some contract-before-listing records may be private sales entered into the
+MLS after the fact rather than errors.
+
+**7. Geographic data quality**
+
+| Flag | Records |
+|---|---|
+| `missing_coords_flag` | 4,796 |
+| `zero_coords_flag` | 46 |
+| `positive_longitude_flag` | 35 |
+| `out_of_state_flag` (outside an approximate California boundary) | 116 |
+
+The out-of-state count includes the zero and positive-longitude records.
+About 1% of sales have a coordinate issue (mostly missing coordinates).
