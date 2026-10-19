@@ -349,7 +349,7 @@ ContractStatusChangeDate converted from text to `datetime64`.
 
 - Removed 2 rows missing ClosePrice (unusable for price metrics)
 - All other missing values left blank (they mostly mean the field does not
-  apply or was not provided, and filling them in would invent data).
+  apply or was not provided, and filling them in would invent data)
 
 **4. Numeric field types confirmed**
 
