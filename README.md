@@ -392,3 +392,85 @@ MLS after the fact rather than errors.
 
 The out-of-state count includes the zero and positive-longitude records.
 About 1% of sales have a coordinate issue (mostly missing coordinates).
+
+## Weeks 4-5: Data Cleaning and Preparation (Listings)
+
+**Script:** `IDXweek4_listings_cleaning.py`
+
+Cleans the enriched listings dataset: removes duplicate columns, converts
+date fields, removes redundant columns, handles missing and invalid values,
+flags date and geographic issues, and saves an analysis-ready CSV as
+`listings_cleaned.csv`. Follows the same steps as the sold script.
+
+Last run: 10/26/2026
+
+### Row and column counts
+
+| | Rows | Columns |
+|---|---|---|
+| Before cleaning | 665,393 | 73 |
+| After cleaning  | 665,393 | 61 |
+
+### Transformations
+
+**1. Duplicate columns removed (11)**
+
+The 11 `.1` columns documented in Weeks 2-3 were each confirmed to be an
+exact copy of their original before removal.
+
+**2. Date fields converted to datetime**
+
+CloseDate, PurchaseContractDate, ListingContractDate, and
+ContractStatusChangeDate converted from text to datetime.
+0 unreadable dates in any field.
+
+**3. Redundant and unnecessary columns removed (8)**
+
+- **Redundant:** same 5 columns as the sold script
+- **Metadata not used for analysis:** ListAgentEmail, BuyerAgentMlsId,
+  BuyerOfficeAOR (the other sold metadata fields are not in the listings data)
+
+**4. Missing values**
+
+- No rows removed: a listing without a close price has not sold yet, and the
+  core listing fields (ListPrice, ListingContractDate) are complete
+- All missing values left blank
+- About 23,000 listings have a CloseDate but no ClosePrice (469,169 vs.
+  445,925 blanks). Possibly listings that ended without a sale; to review later
+
+**5. Numeric field types confirmed**
+
+Same 10 fields as the sold script (all numeric types, no conversion needed).
+
+**6. Invalid numeric values**
+
+| Rule | Records | Action |
+|---|---|---|
+| ClosePrice <= 0 | 0 | None needed |
+| LivingArea <= 0 | 429 | Value set to missing (listing kept) |
+| DaysOnMarket < 0 | 34 | Value set to missing (listing kept) |
+| BedroomsTotal < 0 | 0 | None needed |
+| BathroomsTotalInteger < 0 | 0 | None needed |
+
+**7. Date consistency flags**
+
+| Flag | Records |
+|---|---|
+| `listing_after_close_flag` | 91 |
+| `purchase_after_close_flag` | 266 |
+| `negative_timeline_flag` (contract before listing) | 325 |
+
+Counts are close to the sold dataset since listings that sold appear in both.
+
+**8. Geographic data quality**
+
+| Flag | Records |
+|---|---|
+| `missing_coords_flag` | 81,441 |
+| `zero_coords_flag` | 92 |
+| `positive_longitude_flag` | 98 |
+| `out_of_state_flag` (outside an approximate California boundary) | 402 |
+
+About 12% of listings are missing coordinates compared with 1% of sales
+(the listings files did not have coordinates filled in). Zip code
+fields are nearly complete so zip-level analysis is not affected.
