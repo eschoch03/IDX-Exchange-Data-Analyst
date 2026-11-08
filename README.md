@@ -474,3 +474,91 @@ Counts are close to the sold dataset since listings that sold appear in both.
 About 12% of listings are missing coordinates compared with 1% of sales
 (the listings files did not have coordinates filled in). Zip code
 fields are nearly complete so zip-level analysis is not affected.
+
+## Week 6: Feature Engineering and Market Metrics
+
+**Script:** `IDXweek6_sold_metrics.py`
+
+Creates market metrics from the cleaned sold dataset: price ratios, price
+per square foot, time fields, and timeline durations. Summarizes the
+metrics by county and property subtype, and saves the dataset as
+`sold_metrics.csv`.
+
+Last run: 11/8/2026
+
+### Metrics created
+
+| Metric | Column | Formula |
+|---|---|---|
+| Price Ratio | `price_ratio` | ClosePrice / ListPrice |
+| Close to Original List Ratio | `close_to_original_list_ratio` | ClosePrice / OriginalListPrice |
+| Price Per Square Foot | `price_per_sqft` | ClosePrice / LivingArea |
+| Days on Market | `DaysOnMarket` | Existing field |
+| Year, Month | `close_year`, `close_month` | From CloseDate |
+| YrMo | `year_month` | From CloseDate |
+| Listing to Contract Days | `listing_to_contract_days` | PurchaseContractDate - ListingContractDate |
+| Contract to Close Days | `contract_to_close_days` | CloseDate - PurchaseContractDate |
+
+Notes:
+- The handbook gives Price Ratio and Close to Original List Ratio the same
+  formula. Price Ratio uses ListPrice here (sold-to-list ratio).
+- 2 records with an OriginalListPrice of 0 are treated as missing for the
+  close to original list ratio.
+
+### Validation
+
+Negative timeline durations match the Weeks 4-5 date flags exactly:
+
+| Check | Records |
+|---|---|
+| Negative listing to contract days | 315 |
+| `negative_timeline_flag` | 315 |
+| Negative contract to close days | 242 |
+| `purchase_after_close_flag` | 242 |
+
+### Metric summary
+
+| Metric | 25% | Median | 75% |
+|---|---|---|---|
+| Price ratio | 0.98 | 1.00 | 1.02 |
+| Close to original list ratio | 0.95 | 0.99 | 1.02 |
+| Price per sq ft | 367 | 536 | 731 |
+| Days on market | 8 | 19 | 49 |
+| Listing to contract days | 10 | 25 | 59 |
+| Contract to close days | 21 | 29 | 36 |
+
+Extreme values remain in every metric (e.g. price ratio up to 200,200 and
+listing to contract days as low as -36,407) caused by outliers documented
+in Weeks 2-3 (To handle in Week 7)
+
+### Segment summary: top 10 counties by sales
+
+| County | Sales | Median price | Median $/sq ft | Median DOM | Median price ratio |
+|---|---|---|---|---|---|
+| Los Angeles | 123,080 | 905,000 | 609 | 19 | 1.00 |
+| Riverside | 68,305 | 600,000 | 321 | 30 | 1.00 |
+| San Diego | 61,636 | 900,000 | 590 | 15 | 1.00 |
+| Orange | 55,781 | 1,185,000 | 675 | 15 | 1.00 |
+| San Bernardino | 46,075 | 535,000 | 332 | 25 | 1.00 |
+| Alameda | 23,428 | 1,130,000 | 699 | 14 | 1.02 |
+| Contra Costa | 22,732 | 825,000 | 520 | 14 | 1.00 |
+| Santa Clara | 21,068 | 1,590,000 | 962 | 10 | 1.02 |
+| Ventura | 15,591 | 870,000 | 516 | 28 | 1.00 |
+| San Mateo | 8,451 | 1,700,000 | 1,052 | 12 | 1.01 |
+
+Bay Area counties have the highest prices per square foot and sell fastest while
+Inland Empire counties (Riverside, San Bernardino) are the most affordable
+and slowest.
+
+### Segment summary: top 5 property subtypes by sales
+
+| Subtype | Sales | Median price | Median $/sq ft | Median DOM |
+|---|---|---|---|---|
+| SingleFamilyResidence | 371,138 | 897,227 | 533 | 17 |
+| Condominium | 81,132 | 625,000 | 562 | 25 |
+| Townhouse | 29,026 | 800,000 | 558 | 18 |
+| ManufacturedOnLand | 6,402 | 321,500 | 226 | 30 |
+| Duplex | 2,776 | 910,000 | 544 | 22 |
+
+The Residential property type also includes a few non-home subtypes
+(BoatSlip: 104, Timeshare: 18, DeededParking: 6). 
