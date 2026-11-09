@@ -561,4 +561,71 @@ and slowest.
 | Duplex | 2,776 | 910,000 | 544 | 22 |
 
 The Residential property type also includes a few non-home subtypes
-(BoatSlip: 104, Timeshare: 18, DeededParking: 6). 
+(BoatSlip: 104, Timeshare: 18, DeededParking: 6)
+
+## Week 7: Outlier Detection and Data Quality
+
+**Script:** `IDXweek7_sold_outliers.py`
+
+Applies the IQR method to ClosePrice, LivingArea, and DaysOnMarket, adds
+outlier flag columns, and saves both a full flagged dataset
+(`sold_flagged.csv`) and a filtered analysis dataset (`sold_filtered.csv`).
+
+Last run: 11/8/2026
+
+### Method
+
+For each field: Q1 and Q3 are the 25th and 75th percentiles, IQR = Q3 - Q1,
+and values below Q1 - 1.5 × IQR or above Q3 + 1.5 × IQR are flagged.
+Missing values are not flagged. Records are flagged but not deleted and the
+filtered dataset excludes any record flagged in at least one field.
+
+### IQR ranges and flags
+
+| Field | IQR upper limit | 99th percentile | Records flagged | Share |
+|---|---|---|---|---|
+| ClosePrice | 2,387,500 | 5,600,000 | 37,067 | 7.5% |
+| LivingArea | 3,692.5 | 5,300 | 21,668 | 4.4% |
+| DaysOnMarket | 110.5 | 235 | 36,762 | 7.4% |
+
+All lower limits are negative so IQR flags only the high end of each field.
+
+New columns: `ClosePrice_outlier_flag`, `LivingArea_outlier_flag`,
+`DaysOnMarket_outlier_flag`, and `any_outlier_flag` (flagged in any field)
+
+### Dataset size
+
+| Dataset | Rows | Columns |
+|---|---|---|
+| Full flagged (`sold_flagged.csv`) | 495,192 | 77 |
+| Filtered (`sold_filtered.csv`) | 418,296 | 77 |
+| Filtered out | 76,896 (15.53%) | |
+
+### Median comparison
+
+| Field | Before | After | Change |
+|---|---|---|---|
+| ClosePrice | 825,000 | 785,000 | -4.85% |
+| LivingArea | 1,648 | 1,574 | -4.49% |
+| DaysOnMarket | 19 | 16 | -15.79% |
+| Price per sq ft | 536.00 | 525.37 | -1.98% |
+| Price ratio | 1.00 | 1.00 | 0.00% |
+
+### Written comparison
+
+Filtering removes 15.53% of records and shifts the typical home toward a
+lower price, a smaller size, and a faster sale. Days on market changes the
+most (-15.79%) since slow-selling listings are removed.
+
+The IQR limits are much stricter than the 1st-99th percentile range for all
+three fields (e.g. 2.39 million vs. 5.6 million for ClosePrice) so
+the flags include many real high-end and large homes along with clear data
+errors. Price per square foot moves only 1.98% while price and size each
+drop about 5%, which supports that most flagged homes are expensive because
+they are large, not because their values are wrong. Negotiation strength is 
+the same in both datasets because the price ratio does not change. 
+
+Because of this, both datasets are kept. The filtered dataset suits
+typical-home medians, while the full flagged dataset suits totals such as sales
+counts and volume. A wider cutoff (3 × IQR) would flag only extreme values
+and is an option if a less strict filter is needed.
