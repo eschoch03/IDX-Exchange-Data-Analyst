@@ -629,3 +629,16 @@ Because of this, both datasets are kept. The filtered dataset suits
 typical-home medians, while the full flagged dataset suits totals such as sales
 counts and volume. A wider cutoff (3 × IQR) would flag only extreme values
 and is an option if a less strict filter is needed.
+
+## Weeks 8-10: Tableau Dashboards (in progress)
+
+### Monthly median close price
+
+January 2024 - September 2026 (excluding Week 7 outliers). Filterable by
+city, county, zip code, and property subtype.
+
+![Monthly median close price](images/week8_median_close_price.png)
+
+Prices are lowest each winter (about $720K-$750K in January) and highest
+each spring and early summer (about $800K-$812K). Year-over year-the
+market is fairly flat.
