@@ -656,11 +656,11 @@ Prices are lowest each winter (about $720K-$750K in January) and highest
 each spring and early summer (about $800K-$812K). Year-over-year, the
 market is fairly flat.
 
-### Average days on market
+### Average Days on Market
 
 ![Average days on market](images/week9_avg_days_on_market.png)
 
-### Average close-to-original-list ratio
+### Average Close-to-Original-List Ratio
 
 ![Average close-to-original-list ratio](images/week9_close_to_original_ratio.png)
 
@@ -668,7 +668,7 @@ Homes typically sell within about 2% of their original asking price. The
 ratio rises above 1.00 in spring (selling over asking) and dips to about
 0.98 in winter, following the same seasonal pattern as price.
 
-### Closed sales
+### Closed Sales
 
 ![Closed sales](images/week9_closed_sales.png)
 
@@ -677,7 +677,7 @@ of another record in the same month, so a plain count gives 495,192.
 Sales volume is strongly seasonal, lowest each January and highest in
 late spring.
 
-### New listings
+### New Listings
 
 ![New listings](images/week9_new_listings.png)
 
