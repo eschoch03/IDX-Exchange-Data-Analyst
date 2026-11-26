@@ -632,13 +632,64 @@ and is an option if a less strict filter is needed.
 
 ## Weeks 8-10: Tableau Dashboards (in progress)
 
-### Monthly median close price
+### market_analysis workbook
 
-January 2024 - September 2026 (excluding Week 7 outliers). Filterable by
-city, county, zip code, and property subtype.
+All sheets cover January 2024 - September 2026 by month and are filterable
+by city, county, zip code, and property subtype.
+
+**Data sources**
+- `sold_flagged.csv`: median price, days on market, ratio, closed sales
+- `listings_cleaned.csv`: new listings
+
+**Filter rules**
+- Medians and averages exclude Week 7 outliers (`any_outlier_flag` = False)
+- Totals (closed sales, new listings) include every record
+- The close-to-original ratio sheet also keeps only ratios between 0.5 and
+  1.5, since placeholder original list prices create extreme ratios that
+  the Week 7 flags do not cover
+
+### Monthly median close price
 
 ![Monthly median close price](images/week8_median_close_price.png)
 
 Prices are lowest each winter (about $720K-$750K in January) and highest
-each spring and early summer (about $800K-$812K). Year-over year-the
+each spring and early summer (about $800K-$812K). Year-over-year, the
 market is fairly flat.
+
+### Average days on market
+
+![Average days on market](images/week9_avg_days_on_market.png)
+
+### Average close-to-original-list ratio
+
+![Average close-to-original-list ratio](images/week9_close_to_original_ratio.png)
+
+Homes typically sell within about 2% of their original asking price. The
+ratio rises above 1.00 in spring (selling over asking) and dips to about
+0.98 in winter, following the same seasonal pattern as price.
+
+### Closed sales
+
+![Closed sales](images/week9_closed_sales.png)
+
+Counted as distinct ListingKeys: 495,144 sales. 48 records are duplicates
+of another record in the same month, so a plain count gives 495,192.
+Sales volume is strongly seasonal, lowest each January and highest in
+late spring.
+
+### New listings
+
+![New listings](images/week9_new_listings.png)
+
+665,393 new listings (no duplicates). Listings peak around March-April at
+about 25,000-27,000 a month and drop to about 10,500-11,000 each December.
+They peak a month or two before closed sales, as homes listed in spring
+close after escrow.
+
+### still to-do
+
+- One market dashboard of my own design
+- Arrange sheets into dashboards and save `market_analysis.twbx`
+- `competitive_analysis.twbx` (Week 10)
+- Zip code data note: a few non-California and placeholder zip codes
+  (e.g. 00000, 00002) to handle before the zip code heat maps
